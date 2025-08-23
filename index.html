@@ -4,61 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LaTeX Live Preview</title>
-  <!-- Bootstrap 5.x CDN -->
+
+  <!-- Bootstrap 5.x -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <!-- MathJax -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <style>
-    body {
-      padding: 20px;
+    html, body {
+      height: 100%;
+      margin: 0;
     }
+
+    .full-height {
+      height: 100vh;
+    }
+
+    .column-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
     textarea {
-      width: 100%;
-      height: 300px;
-      resize: vertical;
+      flex: 1;
+      resize: none;
       font-family: monospace;
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
     }
+
     #preview {
-      min-height: 300px;
+      flex: 1;
+      overflow-y: auto;
       border: 1px solid #ccc;
       padding: 15px;
       background-color: #f8f9fa;
     }
+
+    h5 {
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Left: Input -->
-      <div class="col-md-6 mb-3">
+  <div class="container-fluid full-height">
+    <div class="row h-100">
+      <!-- Left Column: Input -->
+      <div class="col-md-6 column-container">
         <h5>LaTeX Input</h5>
-        <textarea id="latexInput" placeholder="Enter LaTeX here, e.g., \int_0^1 x^2 dx"></textarea>
+        <textarea id="latexInput" placeholder="Enter LaTeX here..."></textarea>
       </div>
-      <!-- Right: Preview -->
-      <div class="col-md-6 mb-3">
+
+      <!-- Right Column: Preview -->
+      <div class="col-md-6 column-container">
         <h5>Math Preview</h5>
         <div id="preview"></div>
       </div>
     </div>
   </div>
 
-  <!-- JS to handle input and rendering -->
+  <!-- JavaScript -->
   <script>
     const input = document.getElementById('latexInput');
     const preview = document.getElementById('preview');
 
     input.addEventListener('input', () => {
       const latex = input.value;
-      // Wrap LaTeX with MathJax inline or display delimiters
-      preview.innerHTML = latex
-      .replaceAll('₹', '{##text{₹}}')
-        .replaceAll('##', '\\')
-        .replaceAll('@', '\\')
-        .replaceAll('!', '}');
-      MathJax.typesetPromise([preview]); // Re-render MathJax
+       preview.innerHTML = latex       .replaceAll('₹', '{##text{₹}}')         .replaceAll('##', '\\')         .replaceAll('@', '\\')         .replaceAll('!', '}');
+      MathJax.typesetPromise([preview]);
     });
 
-    // Optional: trigger initial render
+    // Trigger initial render
     input.dispatchEvent(new Event('input'));
   </script>
 </body>
