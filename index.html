@@ -50,7 +50,11 @@
     input.addEventListener('input', () => {
       const latex = input.value;
       // Wrap LaTeX with MathJax inline or display delimiters
-      preview.innerHTML = `\\[${latex}\\]`;
+      preview.innerHTML = latex
+      .replaceAll('₹', '{##text{₹}}')
+        .replaceAll('##', '\\')
+        .replaceAll('@', '\\')
+        .replaceAll('!', '}');
       MathJax.typesetPromise([preview]); // Re-render MathJax
     });
 
