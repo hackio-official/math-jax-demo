@@ -17,8 +17,22 @@
       margin: 0;
     }
 
-    .full-height {
-      height: 100vh;
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
     }
 
     .column-container {
@@ -44,14 +58,39 @@
       background-color: #f8f9fa;
     }
 
-    h5 {
+    h5, h6 {
       margin-bottom: 10px;
+    }
+
+    .bottom-section {
+      background-color: #e9ecef;
+      border-top: 1px solid #ccc;
+      padding: 15px;
+      font-size: 0.9rem;
+      overflow-y: auto;
+      max-height: 40vh; /* Limit height to avoid covering entire screen */
+    }
+
+    .bottom-section pre {
+      white-space: pre-wrap;
+      background-color: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .table td, .table th {
+      vertical-align: middle !important;
     }
   </style>
 </head>
 <body>
-  <div class="container-fluid full-height">
-    <div class="row h-100">
+  <div class="container-fluid main-wrapper">
+    <!-- Input and Preview -->
+    <div class="row flex-grow-1 main-content">
       <!-- Left Column: Input -->
       <div class="col-md-6 column-container">
         <h5>LaTeX Input</h5>
@@ -64,6 +103,98 @@
         <div id="preview"></div>
       </div>
     </div>
+
+    <!-- Bottom Section -->
+    <div class="row">
+      <div class="col-12 bottom-section">
+        <h6>Arrow Symbols & LaTeX Commands</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>LaTeX Command</th>
+                <th>Rendered Symbol</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>\leftarrow</td><td>\(\leftarrow\)</td></tr>
+              <tr><td>\uparrow</td><td>\(\uparrow\)</td></tr>
+              <tr><td>\rightarrow</td><td>\(\rightarrow\)</td></tr>
+              <tr><td>\downarrow</td><td>\(\downarrow\)</td></tr>
+              <tr><td>\leftrightarrow</td><td>\(\leftrightarrow\)</td></tr>
+              <tr><td>\updownarrow</td><td>\(\updownarrow\)</td></tr>
+              <tr><td>\swarrow</td><td>\(\swarrow\)</td></tr>
+              <tr><td>\nwarrow</td><td>\(\nwarrow\)</td></tr>
+              <tr><td>\nearrow</td><td>\(\nearrow\)</td></tr>
+              <tr><td>\searrow</td><td>\(\searrow\)</td></tr>
+              <tr><td>\twoheadleftarrow</td><td>\(\twoheadleftarrow\)</td></tr>
+              <tr><td>\Lsh</td><td>\(\Lsh\)</td></tr>
+              <tr><td>\leftleftarrows</td><td>\(\leftleftarrows\)</td></tr>
+              <tr><td>\upuparrows</td><td>\(\upuparrows\)</td></tr>
+              <tr><td>\rightleftarrows</td><td>\(\rightleftarrows\)</td></tr>
+              <tr><td>\Lleftarrow</td><td>\(\Lleftarrow\)</td></tr>
+              <tr><td>\Rrightarrow</td><td>\(\Rrightarrow\)</td></tr>
+              <tr><td>\leftarrowtail</td><td>\(\leftarrowtail\)</td></tr>
+              <tr><td>\rightarrowtail</td><td>\(\rightarrowtail\)</td></tr>
+              <tr><td>\rightsquigarrow</td><td>\(\rightsquigarrow\)</td></tr>
+              <tr><td>\leftrightsquigarrow</td><td>\(\leftrightsquigarrow\)</td></tr>
+              <tr><td>\looparrowleft</td><td>\(\looparrowleft\)</td></tr>
+              <tr><td>\looparrowright</td><td>\(\looparrowright\)</td></tr>
+              <tr><td>\circlearrowleft</td><td>\(\circlearrowleft\)</td></tr>
+              <tr><td>\circlearrowright</td><td>\(\circlearrowright\)</td></tr>
+              <tr><td>\curvearrowleft</td><td>\(\curvearrowleft\)</td></tr>
+              <tr><td>\curvearrowright</td><td>\(\curvearrowright\)</td></tr>
+              <tr><td>\nleftarrow</td><td>\(\nleftarrow\)</td></tr>
+              <tr><td>\nrightarrow</td><td>\(\nrightarrow\)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h6 class="mt-4">Sample LaTeX Math Table</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>LaTeX Source</th>
+                <th>Rendered Output</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-start">
+                  <pre class="m-0">
+\[
+\begin{array}{|c|c|c|}
+\hline
+x & y & x+y \\
+\hline
+1 & 2 & 3 \\
+3 & 4 & 7 \\
+5 & 6 & 11 \\
+\hline
+\end{array}
+\]
+                  </pre>
+                </td>
+                <td>
+                  \[
+                  \begin{array}{|c|c|c|}
+                  \hline
+                  x & y & x+y \\
+                  \hline
+                  1 & 2 & 3 \\
+                  3 & 4 & 7 \\
+                  5 & 6 & 11 \\
+                  \hline
+                  \end{array}
+                  \]
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- JavaScript -->
@@ -73,7 +204,11 @@
 
     input.addEventListener('input', () => {
       const latex = input.value;
-       preview.innerHTML = latex       .replaceAll('₹', '{##text{₹}}')         .replaceAll('##', '\\')         .replaceAll('@', '\\')         .replaceAll('!', '}');
+      preview.innerHTML = latex
+        .replaceAll('₹', '{##text{₹}}')
+        .replaceAll('##', '\\')
+        .replaceAll('@', '\\')
+        .replaceAll('!', '}');
       MathJax.typesetPromise([preview]);
     });
 
