@@ -89,13 +89,25 @@
 </head>
 <body>
   <div class="container-fluid main-wrapper">
+
     <!-- Input and Preview -->
     <div class="row flex-grow-1 main-content">
       <!-- Left Column: Input -->
       <div class="col-md-6 column-container">
-        <h5>LaTeX Input</h5>
+	<div class="row  flex-grow-1">
+<div class="col-12 column-container">
+
+	 <h5>LaTeX Input</h5>
         <textarea id="latexInput" placeholder="Enter LaTeX here..."></textarea>
       </div>
+</div>
+<div class="col-12">
+<h2>JSON Input</h2>
+  <textarea id="jsonInput" rows="10" placeholder='Paste JSON here...'></textarea>
+
+</div>
+</div>
+       
 
       <!-- Right Column: Preview -->
       <div class="col-md-6 column-container">
@@ -103,9 +115,16 @@
         <div id="preview"></div>
       </div>
     </div>
+   <div class="row">
 
     <!-- Bottom Section -->
-    <div class="row">
+  <!--  <div class="row">
+<div class="col-12">
+<h2>JSON Input</h2>
+  <textarea id="jsonInput" rows="10" placeholder='Paste JSON here...'></textarea>
+
+</div>
+
       <div class="col-12 bottom-section">
         <h6>Arrow Symbols & LaTeX Commands</h6>
         <div class="table-responsive">
@@ -150,6 +169,7 @@
           </table>
         </div>
 
+
         <h6 class="mt-4">Sample LaTeX Math Table</h6>
         <div class="table-responsive">
           <table class="table table-bordered table-sm align-middle text-center">
@@ -193,27 +213,49 @@ x & y & x+y \\
             </tbody>
           </table>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 
   <!-- JavaScript -->
-  <script>
-    const input = document.getElementById('latexInput');
-    const preview = document.getElementById('preview');
+<script>
+  const input = document.getElementById('latexInput');
+  const preview = document.getElementById('preview');
+  const jsonInput = document.getElementById("jsonInput");
 
-    input.addEventListener('input', () => {
-      const latex = input.value;
-      preview.innerHTML = latex
-        .replaceAll('₹', '{##text{₹}}')
-        .replaceAll('##', '\\')
-        .replaceAll('@', '\\')
-        .replaceAll('!', '}');
-      MathJax.typesetPromise([preview]);
-    });
+  function renderLatexWithPlaceholders() {
+    const rawLatex = input.value;
+    let latex = rawLatex
+      .replaceAll('₹', '{##text{₹}}')
+      .replaceAll('##', '\\')
+      .replaceAll('@', '\\')
+      .replaceAll('!', '}');
 
-    // Trigger initial render
-    input.dispatchEvent(new Event('input'));
-  </script>
+    let data;
+    try {
+      data = JSON.parse(jsonInput.value);
+    } catch (e) {
+      preview.innerHTML = "Invalid JSON!";
+      return;
+    }
+
+    for (let key in data) {
+      const value = data[key];
+      const regex = new RegExp(key, 'g');
+      latex = latex.replace(regex, value).replaceAll('XX','');
+    }
+
+    preview.innerHTML = latex;
+    MathJax.typesetPromise([preview]);
+  }
+
+  // Listen to both inputs
+  input.addEventListener('input', renderLatexWithPlaceholders);
+  jsonInput.addEventListener('input', renderLatexWithPlaceholders);
+
+  // Trigger initial render
+  renderLatexWithPlaceholders();
+</script>
+
 </body>
 </html>
